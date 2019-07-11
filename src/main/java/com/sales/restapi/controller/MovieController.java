@@ -45,7 +45,7 @@ public class MovieController {
 
      @GetMapping("/movies")
      Resources<Resource<Movie>> all() {
-       List<Resource<Movie>> movies =  movieRepository.findAll().stream()
+       List<Resource<Movie>> movies =  movieRepository.findByActiveMovie().stream()
             .map(movieResourceAssembler::toResource)
             .collect(Collectors.toList());
        
