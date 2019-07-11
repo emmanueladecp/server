@@ -16,6 +16,6 @@ import org.springframework.data.jpa.repository.Query;
  */
 public interface MovieRepository extends JpaRepository<Movie, Long> {
     
-    @Query("SELECT id,date,endtime,name,starttime,stock FROM MOVIE WHERE date > CURRENT_DATE()")
-    public List<Movie> findByActiveMovie();
+    //@Query("SELECT id,date,endtime,name,starttime,stock FROM MOVIE WHERE date > CURRENT_DATE()")
+    //public List<Movie> findByActiveMovie();
 }
