@@ -5,6 +5,8 @@
  */
 package com.sales.restapi.controller;
 
+import com.fasterxml.jackson.core.JsonProcessingException;
+import com.fasterxml.jackson.databind.ObjectMapper;
 import com.sales.restapi.entities.Movie;
 import com.sales.restapi.exception.MovieNotFoundException;
 import com.sales.restapi.repo.MovieRepository;
@@ -22,9 +24,11 @@ import org.springframework.web.bind.annotation.PutMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RestController;
 import static org.springframework.hateoas.mvc.ControllerLinkBuilder.*;
+import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.CrossOrigin;
 import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.RequestParam;
 /**
  *
  * @author ADMIN
@@ -97,10 +101,25 @@ public class MovieController {
         .body(resource);
      }
 
-     @DeleteMapping("/movies/{id}")
-     ResponseEntity<?> deleteMovie(@PathVariable Long id) {
-       movieRepository.deleteById(id);
-       
-       return ResponseEntity.noContent().build();
-     }
+    @DeleteMapping("/movies/{id}")
+    ResponseEntity<?> deleteMovie(@PathVariable Long id) {
+      movieRepository.deleteById(id);
+
+      return ResponseEntity.noContent().build();
+    }
+     
+    @GetMapping("/movieSearch")
+       public ResponseEntity<String> doAutoComplete(@RequestParam("q") final String input) {
+               //List<String> strings = autoCompleteService.doAutoComplete(input);
+               ObjectMapper mapper = new ObjectMapper();
+               String resp = "";
+               
+               List<Movie> movies = movieRepository.findByActiveMovie();
+               
+               try {
+                       resp = mapper.writeValueAsString(movies);
+               } catch (JsonProcessingException e) {
+               }
+               return new ResponseEntity<String>(resp, HttpStatus.OK);
+       }
 }
